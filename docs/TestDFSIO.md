@@ -12,7 +12,7 @@ instance can sustain.
 
 The original version is included in the Hadoop's MapReduce job client library. However, since we could run the tests
 on a Spark Standalone cluster, we need to use a modified version of this benchmark based entirely on Spark and fully
-compatible with the Alluxio filesystem.
+compatible with MinIO object storage.
 
 Getting started
 ---------------
@@ -47,22 +47,22 @@ benchmark is bundled, you can launch, for instance, the *write* test just typing
 ```
 $SPARK_HOME/bin/spark-submit \
   --master <master-url> \
-  --class com.bbva.spark.benchmarks.dfsio.TestDFSIO \
+  --class io.minio.spark.benchmarks.dfsio.TestDFSIO \
   --total-executor-cores <total-executor-cores> \
   --executor-cores <executor-cores> \
   --driver-memory 1g \
   --executor-memory 1g \
   --conf spark.locality.wait=30s \
   ... # other options
-  /path/to/spark-benchmarks/dfsio/target/scala-2.11/spark-benchmarks-dfsio-0.1.0-with-dependencies.jar \
-  write --numFiles 10 --fileSize 1GB --outputDir hdfs://<hdfs-namenode>:8020/benchmarks/DFSIO
+  --packages io.minio.spark:spark-benchmarks-dfsio:0.2.0 \
+  write --numFiles 100 --fileSize 1GB --outputDir s3a://benchmarks/DFSIO
 ```
 
-This test will run the corresponding *write* test using 10 input files of size 1GB.
+This test will run the corresponding *write* test using 100 input files of size 1GB.
 
-The TestDFSIO benchmark writes its files to /benchmarks/DFSIO on HDFS. Files from older write runs are overwritten.
-If you want to preserve the output files of previous runs, you have to copy these files manually to a new HDFS
-location. Benchmark results are appended to a local file called `TestDFSIO_results.log` in the current local directory
+The TestDFSIO benchmark writes its files to `benchmarks` bucket, and prefix `/DFSIO` on S3 object storage. Files from older write
+runs are overwritten. If you want to preserve the output files of previous runs, you have to copy these files manually to a
+new HDFS location. Benchmark results are appended to a local file called `TestDFSIO_results.log` in the current local directory
 and also printed to log. If you want to save them to different filename, set the `-resFile` option appropriately.
 
 The benchmark accepts different arguments passed to the main method of the main class. You can use the option `--help`
@@ -71,8 +71,8 @@ to print the different combinations:
 ```
 $SPARK_HOME/bin/spark-submit \
   --master local \
-  --class com.bbva.spark.benchmarks.dfsio.TestDFSIO \
-  /path/to/spark-benchmarks/dfsio/target/scala-2.11/spark-benchmarks-dfsio-0.1.0-with-dependencies.jar \
+  --class io.minio.spark.benchmarks.dfsio.TestDFSIO \
+  --packages io.minio.spark:spark-benchmarks-dfsio:0.2.0 \
   --help
 ```
 
@@ -100,14 +100,14 @@ an error message will be shown up.
 
   --numFiles <value>       Number of files to read. Default to 4.
   --fileSize <value>       Size of each file to read (B|KB|MB|GB). Default to 128B.
-  --inputDir <file>        Name of the directory where to find the files to read. Default to /benchmarks/DFSIO
+  --inputDir <file>        Name of the directory where to find the files to read. Default to `benchmarks/DFSIO`
   --resFile <fileName>     Name of the local file in the current local directory where to append the benchmark results.
   --bufferSize <value>     Size of each file to write (B|KB|MB|GB). Default to 1MB.
   --hadoopProps k1=v1,k2=v2...
                            Extra hadoop configuration properties
 Command: clean [options]
 Remove previous test data. This command deletes de output directory.
-  --outputDir <file>       Name of the directory to clean. Default to /benchmarks/DFSIO
+  --outputDir <file>       Name of the directory to clean. Default to `benchmarks/DFSIO`
   --help                   prints this usage text
   --version
 
@@ -118,15 +118,15 @@ Following the previous instructions, the *read* test should be launched like thi
 ```
 $SPARK_HOME/bin/spark-submit \
   --master <master-url> \
-  --class com.bbva.spark.benchmarks.dfsio.TestDFSIO \
+  --class io.minio.spark.benchmarks.dfsio.TestDFSIO \
   --total-executor-cores <total-executor-cores> \
   --executor-cores <executor-cores> \
   --driver-memory 1g \
   --executor-memory 1g \
   --conf spark.locality.wait=30s \
   ... # other options
-  /path/to/spark-benchmarks/dfsio/target/scala-2.11/spark-benchmarks-dfsio-0.1.0-with-dependencies.jar \
-  read --numFiles 10 --fileSize 1GB --inputDir hdfs://<hdfs-namenode>:8020/benchmarks/DFSIO
+  --packages io.minio.spark:spark-benchmarks-dfsio:0.2.0 \
+  read --numFiles 100 --fileSize 1GB --inputDir s3a://benchmarks/DFSIO
 ```
 
 Note that each time the *write* phase is executed, the benchmark data is previously cleaned up. However, if you need to force
@@ -135,10 +135,10 @@ the deletion at any moment, you can use the *clean* command:
 ```
 $SPARK_HOME/bin/spark-submit \
   --master <master-url> \
-  --class com.bbva.spark.benchmarks.dfsio.TestDFSIO \
+  --class io.minio.spark.benchmarks.dfsio.TestDFSIO \
   ... # other options
-  /path/to/spark-benchmarks/dfsio/target/scala-2.11/spark-benchmarks-dfsio-0.1.0-with-dependencies.jar \
-  clean --outputDir hdfs://<hdfs-namenode>:8020/benchmarks/DFSIO
+  --packages io.minio.spark:spark-benchmarks-dfsio:0.2.0 \
+  clean --outputDir s3a://benchmarks/DFSIO
 ```
 
 For more information about submitting applications, please, refer to the

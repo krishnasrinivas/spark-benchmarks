@@ -1,14 +1,17 @@
 Spark Benchmarks
 ================
 
-[![Build Status](https://travis-ci.org/BBVA/spark-benchmarks.svg?branch=master)](https://travis-ci.org/BBVA/spark-benchmarks)
+> Thanks to original work at https://github.com/BBVA/spark-benchmarks this is a fork to support
+> a generalized filesystem connector to support HDFS, S3A and all other connectors. This fork
+> also supports Spark 2.4.x, Hadoop 3.1.x and will be is more actively maintained.
+
+[![Build Status](https://travis-ci.org/minio/spark-benchmarks.svg?branch=master)](https://travis-ci.org/minio/spark-benchmarks)
 
 Overview
 --------
 
 Spark Benchmarks is a benchmarking suite specific for Apache Spark that helps to evaluate a Spark deployment 
-in terms of speed, throughput and system resource utilization. It comprises a representative set of Spark workloads 
-including DFSIO, TeraSort, etc.
+in terms of speed, throughput and system resource utilization.
 
 Motivation
 ----------
@@ -24,7 +27,7 @@ generating a large number of tasks performing writes and reads simultaneously, d
 implementation.
 
 The purpose of this suite is to help users to stress different scenarios of Spark combined with a distributed 
-file system (HDFS, Alluxio, etc), regardless of whether it runs on Mesos, YARN or Spark Standalone. Moreover, it enables
+file system (MinIO, HDFS, Alluxio, etc), regardless of whether it runs on Mesos, YARN or Spark Standalone. Moreover, it enables
 an exhaustive study and comparision for different platform and hardware setups, sizing tuning and system optimizations, 
 making easier the evaluation of their performance implications and the identification of bottlenecks.
 
@@ -48,12 +51,12 @@ Building Spark Benchmarks
 The followings are needed for building Spark Benchmarks
 
 * JDK 8
-* [SBT 0.13.15](http://www.scala-sbt.org/0.13.15/docs/Getting-Started/Setup.html)
+* [SBT 0.13.17](http://www.scala-sbt.org/0.13.17/docs/Getting-Started/Setup.html)
 
 ### Supported Spark/Hadoop releases:
 
-* Spark 2.1.x
-* Hadoop HDFS 2.x
+* Spark 2.4.x
+* Hadoop 3.1.x
 
 ### Building
 
@@ -70,16 +73,10 @@ builds the dfsio workload.
 sbt dfsio/clean dfsio/assembly
 ```
 
-## TODO:
-
-* Implement TeraSort benchmark
-* Implement NNBench benchmark
-* Implement PageRank benchmark
-
 ## Contributions
 
-Contributions are very welcome, see [CONTRIBUTING.md](https://github.com/BBVA/spark-benchmarks/blob/master/CONTRIBUTING.md) 
-or skim [existing tickets](https://github.com/BBVA/spark-benchmarks/issues) to see where you could help out.
+Contributions are very welcome, see [CONTRIBUTING.md](https://github.com/minio/spark-benchmarks/blob/master/CONTRIBUTING.md) 
+or skim [existing tickets](https://github.com/minio/spark-benchmarks/issues) to see where you could help out.
 
 ## License
 

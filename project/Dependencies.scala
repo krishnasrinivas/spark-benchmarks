@@ -4,11 +4,11 @@ import Keys._
 object Dependencies {
 
   val AlluxioVersion = "1.4.0"
-  val ScalaVersion = "2.11.11"
+  val ScalaVersion = "2.11.12"
   val ScalaLoggingVersion = "3.5.0"
   val ScalaTestVersion = "3.0.1"
   val ScoptVersion = "3.5.0"
-  val SparkVersion = "2.1.0"
+  val SparkVersion = "2.4.0"
 
   val Common = Seq(
     libraryDependencies ++= Seq(
@@ -42,4 +42,9 @@ object Dependencies {
     )
   )
 
+  val Extra = Seq(
+     libraryDependencies ++= Seq(
+       "org.apache.hadoop" % "hadoop-aws" % "3.1.2"
+     )
+  )
 }

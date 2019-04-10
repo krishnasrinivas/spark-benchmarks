@@ -13,14 +13,42 @@ object Common extends AutoPlugin {
 
   override lazy val projectSettings =
     Dependencies.Common ++ Seq(
-      organization := "com.bbva.spark",
-      organizationName := "BBVA",
-      version := "0.1.0",
-      organizationHomepage := Some(url("https://github.com/BBVA")),
-      scmInfo := Some(ScmInfo(url("https://github.com/BBVA/spark-benchmarks"), "git@github.com:BBVA/spark-benchmarks.git")),
-      developers += Developer("contributors", "Contributors", "", url("https://github.com/BBVA/spark-benchmarks/contributors")),
+      organization := "io.minio.spark",
+      organizationName := "MinIO, Inc.",
+      version := "0.2.0",
+      organizationHomepage := Some(url("https://github.com/minio")),
+      scmInfo := Some(ScmInfo(url("https://github.com/minio/spark-benchmarks"), "git@github.com:minio/spark-benchmarks.git")),
+      developers += Developer("contributors", "Contributors", "", url("https://github.com/minio/spark-benchmarks/contributors")),
 
       licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))),
+
+      publishMavenStyle := true,
+      publishArtifact in Test := false,
+
+      pomIncludeRepository := { _ => false },
+
+      publishTo := {
+        val nexus = "https://oss.sonatype.org/"
+        if (version.value.endsWith("SNAPSHOT"))
+          Some("snapshots" at nexus + "content/repositories/snapshots")
+        else
+          Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+      },
+
+      pomExtra := (
+        <url>https://github.com/minio/spark-benchmarks</url>
+            <scm>
+          <connection>scm:git:github.com/minio/spark-benchmarks</connection>
+          <developerConnection>scm:git:git@github.com:minio/spark-benchmarks</developerConnection>
+          <url>github.com/minio/spark-benchmarks</url>
+          </scm>
+          <developers>
+          <developer>
+          <id>minio</id>
+          <name>MinIO</name>
+          <url>http://www.min.io</url>
+            </developer>
+          </developers>),
 
       scalaVersion := Dependencies.ScalaVersion,
 
@@ -29,7 +57,6 @@ object Common extends AutoPlugin {
         "-feature",
         "-unchecked",
         "-deprecation",
-        //"-Xfatal-warnings",
         "-Xlint",
         "-Yno-adapted-args",
         "-Ywarn-dead-code",
@@ -40,13 +67,10 @@ object Common extends AutoPlugin {
         "-Xlint:unchecked"
       ),
 
-      //autoAPIMappings := true,
-      //apiURL := Some(url(s"http://developer.bbva.com/docs/api/spark-benchmarks/${version.value}")),
-
       headers := headers.value ++ Map(
-        "scala" -> Apache2_0("2017", "Banco Bilbao Vizcaya Argentaria S.A."),
-        "java" -> Apache2_0("2017", "Banco Bilbao Vizcaya Argentaria S.A."),
-        "conf" -> Apache2_0("2017", "Banco Bilbao Vizcaya Argentaria S.A.", "#")
+        "scala" -> Apache2_0("2019", "MinIO, Inc."),
+        "java" -> Apache2_0("2019", "MinIO, Inc."),
+        "conf" -> Apache2_0("2019", "MinIO, Inc.", "#")
       )
     )
 

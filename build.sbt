@@ -7,8 +7,9 @@ lazy val dfsio = project
   .enablePlugins(AutomateHeaderPlugin, AssemblyPlugin, BuildInfoPlugin)
   .settings(
     name := "spark-benchmarks-dfsio",
-    buildInfoPackage := "com.bbva.spark.benchmarks.dfsio",
+    buildInfoPackage := "io.minio.spark.benchmarks.dfsio",
     Dependencies.Spark,
     Dependencies.Scopt,
-    Dependencies.Alluxio
+    Dependencies.Alluxio,
+    Dependencies.Extra
   )

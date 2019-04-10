@@ -1,4 +1,21 @@
 /*
+ * Copyright 2019 MinIO, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
+ *
  * Copyright 2017 Banco Bilbao Vizcaya Argentaria S.A.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +31,14 @@
  * limitations under the License.
  */
 
-package com.bbva.spark.benchmarks.dfsio
+package io.minio.spark.benchmarks.dfsio
 
 import java.io.{BufferedWriter, FileWriter, PrintWriter}
 import java.util.Date
 
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.hadoop.fs.Path
 import org.apache.hadoop.io.{LongWritable, SequenceFile, Text}
 import org.apache.hadoop.io.SequenceFile.{CompressionType, Writer}
 import org.apache.hadoop.io.compress._
@@ -77,8 +94,8 @@ object TestDFSIO extends App with LazyLogging {
 
   private def cleanUp(benchmarkDir: String)(implicit hadoopConf: Configuration): Unit = {
     logger.info("Cleaning up test files")
-    val fs = FileSystem.get(hadoopConf)
     val path = new Path(benchmarkDir)
+    val fs = path.getFileSystem(hadoopConf)
     if (fs.exists(path)) fs.delete(path, true)
   }
 
@@ -88,7 +105,7 @@ object TestDFSIO extends App with LazyLogging {
     val controlDirPath: Path = new Path(benchmarkDir, ControlDir)
 
     logger.info("Deleting any previous control directory...")
-    val fs = FileSystem.get(hadoopConf)
+    val fs = controlDirPath.getFileSystem(hadoopConf)
     if (fs.exists(controlDirPath)) fs.delete(controlDirPath, true)
 
     logger.info("Creating control files: {} bytes, {} files", fileSize.toString, numFiles.toString)
@@ -127,7 +144,7 @@ object TestDFSIO extends App with LazyLogging {
     val dataDirPath: Path = new Path(benchmarkDir, DataDir)
 
     logger.info("Deleting any previous data directories...")
-    val fs = FileSystem.get(hadoopConf)
+    val fs = dataDirPath.getFileSystem(hadoopConf)
     if (fs.exists(dataDirPath)) fs.delete(dataDirPath, true)
 
     logger.info("Writing files...")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Banco Bilbao Vizcaya Argentaria S.A.
+ * Copyright 2019 MinIO, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
+ *
+ * Copyright 2017 Banco Bilbao Vizcaya Argentaria S.A.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.*/
 
-package com.bbva.spark.benchmarks.dfsio
+package io.minio.spark.benchmarks.dfsio
 
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.FileSystem
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.hadoop.io.{LongWritable, Text}
 import org.apache.spark.SerializableWritable
 import org.apache.spark.rdd.RDD
@@ -33,7 +49,7 @@ abstract class IOTestBase(hadoopConf: Configuration, dataDir: String) extends Se
     inputPaths.mapPartitions { partition =>
 
       implicit val conf = wrappedConf.value
-      implicit val fs = FileSystem.get(conf)
+      implicit val fs = new Path(dataDir).getFileSystem(conf)
 
       partition.map { case (file, size) =>
 
