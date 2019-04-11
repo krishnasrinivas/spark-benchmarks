@@ -54,7 +54,7 @@ $SPARK_HOME/bin/spark-submit \
   --executor-memory 1g \
   --conf spark.locality.wait=30s \
   ... # other options
-  --packages io.minio.spark:spark-benchmarks-dfsio:0.2.0 \
+  --packages io.minio:spark-benchmarks-dfsio_2.11:0.2.0 \
   write --numFiles 100 --fileSize 1GB --outputDir s3a://benchmarks/DFSIO
 ```
 
@@ -72,7 +72,7 @@ to print the different combinations:
 $SPARK_HOME/bin/spark-submit \
   --master local \
   --class io.minio.spark.benchmarks.dfsio.TestDFSIO \
-  --packages io.minio.spark:spark-benchmarks-dfsio:0.2.0 \
+  --packages io.minio:spark-benchmarks-dfsio_2.11:0.2.0 \
   --help
 ```
 
@@ -125,7 +125,7 @@ $SPARK_HOME/bin/spark-submit \
   --executor-memory 1g \
   --conf spark.locality.wait=30s \
   ... # other options
-  --packages io.minio.spark:spark-benchmarks-dfsio:0.2.0 \
+  --packages io.minio:spark-benchmarks-dfsio_2.11:0.2.0 \
   read --numFiles 100 --fileSize 1GB --inputDir s3a://benchmarks/DFSIO
 ```
 
@@ -137,7 +137,7 @@ $SPARK_HOME/bin/spark-submit \
   --master <master-url> \
   --class io.minio.spark.benchmarks.dfsio.TestDFSIO \
   ... # other options
-  --packages io.minio.spark:spark-benchmarks-dfsio:0.2.0 \
+  --packages io.minio:spark-benchmarks-dfsio_2.11:0.2.0 \
   clean --outputDir s3a://benchmarks/DFSIO
 ```
 

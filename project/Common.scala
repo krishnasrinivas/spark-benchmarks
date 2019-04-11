@@ -13,19 +13,29 @@ object Common extends AutoPlugin {
 
   override lazy val projectSettings =
     Dependencies.Common ++ Seq(
-      organization := "io.minio.spark",
+      organization := "io.minio",
       organizationName := "MinIO, Inc.",
+      organizationHomepage := Some(url("https://www.min.io")),
       version := "0.2.0",
-      organizationHomepage := Some(url("https://github.com/minio")),
-      scmInfo := Some(ScmInfo(url("https://github.com/minio/spark-benchmarks"), "git@github.com:minio/spark-benchmarks.git")),
-      developers += Developer("contributors", "Contributors", "", url("https://github.com/minio/spark-benchmarks/contributors")),
+      scmInfo := Some(
+        ScmInfo(
+          url("https://github.com/minio/spark-benchmarks"),
+          "git@github.com:minio/spark-benchmarks.git"
+        )
+      ),
+
+      developers += Developer(
+        id = "minio",
+        name = "MinIO",
+        email = "dev@min.io",
+        url = url("https://www.min.io")
+      ),
 
       licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))),
+      homepage := Some(url("https://github.com/minio/spark-benchmarks")),
+      description := "Spark testDFSIO benchmarks",
 
       publishMavenStyle := true,
-      publishArtifact in Test := false,
-
-      pomIncludeRepository := { _ => false },
 
       publishTo := {
         val nexus = "https://oss.sonatype.org/"
@@ -35,20 +45,7 @@ object Common extends AutoPlugin {
           Some("releases"  at nexus + "service/local/staging/deploy/maven2")
       },
 
-      pomExtra := (
-        <url>https://github.com/minio/spark-benchmarks</url>
-            <scm>
-          <connection>scm:git:github.com/minio/spark-benchmarks</connection>
-          <developerConnection>scm:git:git@github.com:minio/spark-benchmarks</developerConnection>
-          <url>github.com/minio/spark-benchmarks</url>
-          </scm>
-          <developers>
-          <developer>
-          <id>minio</id>
-          <name>MinIO</name>
-          <url>http://www.min.io</url>
-            </developer>
-          </developers>),
+      pomIncludeRepository := { _ => false },
 
       scalaVersion := Dependencies.ScalaVersion,
 
@@ -73,5 +70,4 @@ object Common extends AutoPlugin {
         "conf" -> Apache2_0("2019", "MinIO, Inc.", "#")
       )
     )
-
 }
