@@ -55,7 +55,7 @@ $SPARK_HOME/bin/spark-submit \
   --conf spark.locality.wait=30s \
   ... # other options
   --packages io.minio:spark-benchmarks-dfsio_2.11:0.2.0 \
-  write --numFiles 100 --fileSize 1GB --outputDir s3a://benchmarks/DFSIO
+  . write --numFiles 100 --fileSize 1GB --outputDir s<3a://benchmarks/DFSIO
 ```
 
 This test will run the corresponding *write* test using 100 input files of size 1GB.
@@ -73,7 +73,7 @@ $SPARK_HOME/bin/spark-submit \
   --master local \
   --class io.minio.spark.benchmarks.dfsio.TestDFSIO \
   --packages io.minio:spark-benchmarks-dfsio_2.11:0.2.0 \
-  --help
+  . --help
 ```
 
 Which prints the following help text:
@@ -110,7 +110,6 @@ Remove previous test data. This command deletes de output directory.
   --outputDir <file>       Name of the directory to clean. Default to `benchmarks/DFSIO`
   --help                   prints this usage text
   --version
-
 ```
 
 Following the previous instructions, the *read* test should be launched like this:
@@ -126,7 +125,7 @@ $SPARK_HOME/bin/spark-submit \
   --conf spark.locality.wait=30s \
   ... # other options
   --packages io.minio:spark-benchmarks-dfsio_2.11:0.2.0 \
-  read --numFiles 100 --fileSize 1GB --inputDir s3a://benchmarks/DFSIO
+  . read --numFiles 100 --fileSize 1GB --outputDir s3a://benchmarks/DFSIO
 ```
 
 Note that each time the *write* phase is executed, the benchmark data is previously cleaned up. However, if you need to force
@@ -138,7 +137,7 @@ $SPARK_HOME/bin/spark-submit \
   --class io.minio.spark.benchmarks.dfsio.TestDFSIO \
   ... # other options
   --packages io.minio:spark-benchmarks-dfsio_2.11:0.2.0 \
-  clean --outputDir s3a://benchmarks/DFSIO
+  . clean --outputDir s3a://benchmarks/DFSIO
 ```
 
 For more information about submitting applications, please, refer to the
@@ -146,9 +145,7 @@ For more information about submitting applications, please, refer to the
 
 ### Interpreting the results
 
-Now, let's have a look at how the benchmark shows the resulting performance statistics.
-
-Here follows an example of a result log after a write test and a subsequent read test have been run:
+Now, let's have a look at how the benchmark shows the resulting performance statistics. Here follows an example of a result log after a write test and a subsequent read test have been run:
 
 ```
 ----- TestDFSIO ----- : write
