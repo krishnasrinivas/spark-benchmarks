@@ -137,6 +137,8 @@ object TestDFSIO extends App with LazyLogging {
     val median: Float = StatsAccumulator.median(seq)
 
     logger.info("stats...{}", stats)
+    println("Individual worker throughput:")
+    seq.map(a => println(a))
     StatsAccumulator.accumulate(stats, median)
 
   }
@@ -152,6 +154,8 @@ object TestDFSIO extends App with LazyLogging {
     val seq: Seq[Float] = stats.collect().map( a => a.rate)
     val median: Float = StatsAccumulator.median(seq)
     logger.info("stats...{}", stats)
+    println("Individual worker throughput:")
+    seq.map(a => println(a))
     StatsAccumulator.accumulate(stats, median)
 
   }
