@@ -62,7 +62,7 @@ abstract class IOTestBase(hadoopConf: Configuration, dataDir: String) extends Se
     logger.info("IO rate = {}", ioRateMbSec)
 
     Stats(tasks = 1, size = totalSize, time = execTime, rate = ioRateMbSec * 1000,
-      sqRate = ioRateMbSec * ioRateMbSec * 1000)
+      sqRate = ioRateMbSec * ioRateMbSec * 1000, median = 0)
 
   }
 

@@ -133,7 +133,11 @@ object TestDFSIO extends App with LazyLogging {
     logger.info("Writing files...")
     val files: RDD[(Text, LongWritable)] = sc.sequenceFile(controlDirPath.toString, classOf[Text], classOf[LongWritable])
     val stats: RDD[Stats] = new IOWriter(hadoopConf, dataDirPath.toString).runIOTest(files)
-    StatsAccumulator.accumulate(stats)
+    val seq: Seq[Float] = stats.collect().map( a => a.rate)
+    val median: Float = StatsAccumulator.median(seq)
+
+    logger.info("stats...{}", stats)
+    StatsAccumulator.accumulate(stats, median)
 
   }
 
@@ -145,7 +149,10 @@ object TestDFSIO extends App with LazyLogging {
     logger.info("Reading files...")
     val files: RDD[(Text, LongWritable)] = sc.sequenceFile(controlDirPath.toString, classOf[Text], classOf[LongWritable])
     val stats: RDD[Stats] = new IOReader(hadoopConf, dataDirPath.toString).runIOTest(files)
-    StatsAccumulator.accumulate(stats)
+    val seq: Seq[Float] = stats.collect().map( a => a.rate)
+    val median: Float = StatsAccumulator.median(seq)
+    logger.info("stats...{}", stats)
+    StatsAccumulator.accumulate(stats, median)
 
   }
 
@@ -161,14 +168,15 @@ object TestDFSIO extends App with LazyLogging {
     val stdDev = math.sqrt(math.abs(stats.sqRate / 1000 / stats.tasks - med * med))
     val resultLines: String =
       s"""
-        |----- TestDFSIO ----- : ${testMode.command}
-        |           Date & time: ${new Date(System.currentTimeMillis())}
-        |       Number of files: ${stats.tasks}
-        |Total MBytes processed: ${stats.size / 0x100000}
-        |     Throughput mb/sec: ${stats.size * 1000.0 / (stats.time * 0x100000)}
-        |Average IO rate mb/sec: $med
-        | IO rate std deviation: $stdDev
-        |    Test exec time sec: ${execTime.toFloat / 1000}
+        |------- TestDFSIO ----- : ${testMode.command}
+        |             Date & time: ${new Date(System.currentTimeMillis())}
+        |         Number of files: ${stats.tasks}
+        |  Total MBytes processed: ${stats.size / 0x100000}
+        |       Throughput mb/sec: ${stats.size * 1000.0 / (stats.time * 0x100000)}
+        |Avg(Mean) IO rate mb/sec: $med
+        |Avg(Med.) IO rate mb/sec: ${stats.median}
+        |   IO rate std deviation: $stdDev
+        |      Test exec time sec: ${execTime.toFloat / 1000}
         |
       """.stripMargin
     logger.info(resultLines)
